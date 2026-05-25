@@ -293,32 +293,33 @@ async def drm_handler(bot: Client, m: Message):
          
             elif 'classplusapp' in url or "testbook.com" in url or "classplusapp.com/drm" in url or "media-cdn.classplusapp.com/drm" in url:
                 # Extract contentId from URL
-                base_url = url
+                #base_url = url
                 
                 # Check for different parameter patterns (both with and without 'l')
-                if '&contentHashId=' in url:
-                    base_url, contentId = url.split('&contentHashId=')
-                elif 'contentHashId=' in url:
-                    parts = url.split('contentHashId=')
-                    base_url = parts[0]
-                    contentId = parts[1].split('&')[0] if '&' in parts[1] else parts[1]
-                elif '&contentHashIdl=' in url:
-                    base_url, contentId = url.split('&contentHashIdl=')
-                elif 'contentHashIdl=' in url:
-                    parts = url.split('contentHashIdl=')
-                    base_url = parts[0]
-                    contentId = parts[1].split('&')[0] if '&' in parts[1] else parts[1]
-                else:
+                #if '&contentHashId=' in url:
+                   # base_url, contentId = url.split('&contentHashId=')
+                #elif 'contentHashId=' in url:
+                   # parts = url.split('contentHashId=')
+                    #base_url = parts[0]
+                    #contentId = parts[1].split('&')[0] if '&' in parts[1] else parts[1]
+                #elif '&contentHashIdl=' in url:
+                 #   base_url, contentId = url.split('&contentHashIdl=')
+                #elif 'contentHashIdl=' in url:
+                 #   parts = url.split('contentHashIdl=')
+                  #  base_url = parts[0]
+                   # contentId = parts[1].split('&')[0] if '&' in parts[1] else parts[1]
+               # else:
                     # Fallback - try to extract ID from URL pattern
-                    contentId = url.split('/')[-1].split('?')[0] if '/' in url else url
+                    #contentId = url.split('/')[-1].split('?')[0] if '/' in url else url
                 
                 # Clean up contentId - remove any trailing URL parameters or fragments
-                if '&' in contentId:
-                    contentId = contentId.split('&')[0]
-                if '?' in contentId:
-                    contentId = contentId.split('?')[0]
-                if '#' in contentId:
-                    contentId = contentId.split('#')[0]
+               # if '&' in contentId:
+                   # contentId = contentId.split('&')[0]
+                #if '?' in contentId:
+                  #  contentId = contentId.split('?')[0]
+                #if '#' in contentId:
+                   # contentId = contentId.split('#')[0]
+                url,contentId=url.split('&')
                 
                 headers = {
                     'host': 'api.classplusapp.com',
@@ -341,9 +342,8 @@ async def drm_handler(bot: Client, m: Message):
                     'contentId': contentId,
                     'offlineDownload': "false"
                 }
-
-                try:
-                    res = requests.get("https://api.classplusapp.com/cams/uploader/video/jw-signed-url", params=params, headers=headers, timeout=15).json()
+                
+                    url = requests.get("https://api.classplusapp.com/cams/uploader/video/jw-signed-url", params=params, headers=headers).json().get("url")
                     
                     # Check if it's a DRM URL
                     if ("testbook.com" in base_url or "classplusapp.com/drm" in base_url or 
